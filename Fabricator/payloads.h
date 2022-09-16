@@ -182,3 +182,23 @@ void Payload7(HDC hdc) {
 	DeleteDC(hdcTempScreen);
 	DeleteObject(hbmScreen);
 }
+
+void Payload8(HDC hdc) {
+	SIZE szScreen = GetVirtualScreenSize();
+	BITMAPINFO bmi = { 0 };
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFO);
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biWidth = szScreen.cx;
+	bmi.bmiHeader.biHeight = szScreen.cy;
+	PRGBQUAD prgbScreen = { 0 };
+	HDC hdcTempScreen = CreateCompatibleDC(hdc);
+	HBITMAP hbmScreen = CreateDIBSection(hdc, &bmi, 0, (void**)&prgbScreen, NULL, 0);
+	SelectObject(hdcTempScreen, hbmScreen);
+	BitBlt(hdcTempScreen, 0, 0, x, y, hdc, 0, 0, SRCCOPY);
+	
+
+	BitBlt(hdc, 0, 0, x, y, hdcTempScreen, 0, 0, SRCCOPY);
+	DeleteDC(hdcTempScreen);
+	DeleteObject(hbmScreen);
+}

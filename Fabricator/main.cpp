@@ -26,16 +26,16 @@ int WinMain(
 
 	InitLayeredWindow(hInstance);
 
-	// Payload7H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload7T, NULL, 0, NULL);
+	//HANDLE Payload7H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload7T, NULL, 0, NULL);
 	//HANDLE Payload6H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload6T, NULL, 0, NULL);
 	//HANDLE Payload5H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload5T, NULL, 0, NULL);
-	HANDLE Payload4H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload4T, NULL, 0, NULL);
+	//HANDLE Payload4H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload4T, NULL, 0, NULL);
 	//HANDLE Payload4H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload4T, NULL, 0, NULL);
 	//Sleep(2000);
-	HANDLE Payload2H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload2T, NULL, 0, NULL);
+	HANDLE Payload8H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Payload3T, NULL, 0, NULL);
 	//Sleep(1000);
 	//HANDLE Shader2H = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Shader1T, NULL, 0, NULL);
-	Sleep(10000);
+	Sleep(5000);
 
 	return 0;
 }

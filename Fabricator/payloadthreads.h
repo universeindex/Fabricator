@@ -37,3 +37,8 @@ DWORD WINAPI Payload7T() {
 	ExecutePayload(Payload7);
 	return 0;
 }
+
+DWORD WINAPI Payload8T() {
+	ExecutePayload(Payload8);
+	return 0;
+}
