@@ -197,6 +197,41 @@ void Payload8(HDC hdc) {
 	SelectObject(hdcTempScreen, hbmScreen);
 	BitBlt(hdcTempScreen, 0, 0, x, y, hdc, 0, 0, SRCCOPY);
 	
+	SetTextColor(hdcTempScreen, RGB(255, 255, 255));
+	SetBkMode(hdcTempScreen, TRANSPARENT);
+	TextOut(hdcTempScreen, rand() % x, rand() % y, L"get folded idiot!!", wcslen(L"get folded idiot!!"));
+	int yy = rand() % y;
+	int xx = rand() % x;
+	for (int i = 0; i < 32; i++) {
+		BitBlt(hdcTempScreen, xx, yy, rand() % 32 + 32, rand() % 32 + 32, hdcTempScreen, xx + rand() % 3 - 1, yy + rand() % 3 - 1, SRCCOPY);
+	}
+
+	BitBlt(hdc, 0, 0, x, y, hdcTempScreen, 0, 0, SRCCOPY);
+	DeleteDC(hdcTempScreen);
+	DeleteObject(hbmScreen);
+}
+
+double Payload9Tick = 0.0;
+void Payload9(HDC hdc) {
+	SIZE szScreen = GetVirtualScreenSize();
+	BITMAPINFO bmi = { 0 };
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFO);
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biWidth = szScreen.cx;
+	bmi.bmiHeader.biHeight = szScreen.cy;
+	PRGBQUAD prgbScreen = { 0 };
+	HDC hdcTempScreen = CreateCompatibleDC(hdc);
+	HBITMAP hbmScreen = CreateDIBSection(hdc, &bmi, 0, (void**)&prgbScreen, NULL, 0);
+	SelectObject(hdcTempScreen, hbmScreen);
+	BitBlt(hdcTempScreen, 0, 0, x, y, hdc, 0, 0, SRCCOPY);
+
+	for (int yy = 0; yy < y; y += 8) {
+		for (int xx = 0; xx < x; x += 8) {
+			StretchBlt(hdcTempScreen, xx - (int)(sin(Payload9Tick) * 8.0 - 8.0), yy - (int)(sin(Payload9Tick) * 8.0 - 8.0), (int)(sin(Payload9Tick) * 8.0 + 8.0), (int)(sin(Payload9Tick) * 8.0 + 8.0), hdcTempScreen, xx - (int)(sin(Payload9Tick) * 8.0 - 8.0), yy - (int)(sin(Payload9Tick) * 8.0 - 8.0), (int)(sin(Payload9Tick) * 8.0 + 8.0), (int)(sin(Payload9Tick) * 8.0 + 8.0), NOTSRCCOPY);
+			Payload9Tick += 1.0;
+		}
+	}
 
 	BitBlt(hdc, 0, 0, x, y, hdcTempScreen, 0, 0, SRCCOPY);
 	DeleteDC(hdcTempScreen);
